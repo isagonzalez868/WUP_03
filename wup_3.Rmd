@@ -1,7 +1,7 @@
 ---
 title: "Alcohol vs Seat choice"
-author: "Your Name"
-date: "Fall 2020"
+author: "Isabella Gonzalez"
+date: "Spring 2021"
 output: html_document
 ---
 
@@ -15,14 +15,16 @@ require(tigerstats)
 davisdata <- read.csv(file="UCDavis.csv")
 ```
 ## Our Goal is to answer this question Is there a difference between the alcohol consumed between the row
-## you choose to sit in??
-
+## you choose to sit in
 ## Now with ggplot - first select the basic data
 
 ```{r}
 basicCN <- ggplot(davisdata,aes(y=alcohol,x=Seat))
 ```
 ## Now add in boxplot
+
+
+
 
 ```{r}
 basicCN + geom_boxplot()
@@ -35,10 +37,34 @@ basicCN + geom_boxplot()
 basicCN + geom_boxplot(notch=TRUE,outlier.color = "red") + stat_boxplot(geom ='errorbar') + labs(title="Fancy notch boxplot \n with 2 lines")
 ```
 
+This Boxplot shows that the heavy drinkers are mostly in the back.
+
 ## Numerical Summarys 
+
+```{r}
+favstats(alcohol~Seat,data=davisdata)
+```
+
+People who sit in the back drink about more than 3 times as much as alcohol compared to the people who sit in the middle and back.
 
 ## Inferential Tests
 
+```{r}
+model1 <- aov(alcohol~Seat,data=davisdata)
+summary.aov(model1)
+```
+
+This chart shows that the P value is so small that it is unlikely that alcohol consumption in all three seats is the same.
+
+## When significant follow up with TukeyHSD  
+
+```{r}
+plot(TukeyHSD(model1))
+```
+
+The TukeyHSD plot shows that people in the back consume more alcohol than the people in the front; people in the middle drink less than the people in the back; The middle back no evidence of difference in the average alcohol consumption. 
+
 ## Conclusions
 
+The evidence shows that people in the back do consume more alcohol. 
 
